@@ -135,21 +135,20 @@ class DataUtils:
             assert file_paths, "glob error."
 
             all_data, all_attributes = {}, {}
-            with Pool(multi.cpu_count()) as p, tqdm.tqdm(
-                desc="Loading annotation_data", total=len(file_paths)
-            ) as t:
-                for category, data, attributes in p.imap(cls.ml_load_annotation_data, file_paths):
-                    all_attributes[category] = attributes
-                    for d in data:
-                        d["text"] = plain_texts[(category, d["pageid"])]
-                    all_data[category] = data
-                    t.update()
+            # with Pool(multi.cpu_count()) as p, tqdm.tqdm( desc="Loading annotation_data", total=len(file_paths)) as t:
+            for file_path in file_paths:
+                category, data, attributes = cls.ml_load_annotation_data(file_path)
+                all_attributes[category] = attributes
+                for d in data:
+                    d["text"] = plain_texts[(category, d["pageid"])]
+                all_data[category] = data
 
             return all_data, all_attributes
 
         @classmethod
         def load(cls, file_dir):
             plain_texts = cls.load_plain_texts(file_dir)
+            # import ipdb; ipdb.set_trace()
             annotation_data, attributes = cls.load_annotation_data(file_dir, plain_texts)
 
             return annotation_data, attributes

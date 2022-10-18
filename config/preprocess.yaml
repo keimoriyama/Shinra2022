@@ -3,7 +3,7 @@ hydra:
     dir: preprocess
 
 defaults:
-  - preprocess: classification
+  - preprocess: attribute_extraction
 
 preprocess:
   debug_mode: false

@@ -3,7 +3,7 @@ hydra:
     dir: outputs 
 
 defaults:
-  - train: classification
+  - train: attribute_extraction
 
 train:
   seed: 1234
@@ -11,7 +11,7 @@ train:
 
   total_updates: 30000
   eval_updates: 1000
-  use_checkpoint: true
+  use_checkpoint: false
   checkpoint_updates: 1000
   log_updates: 10
 
@@ -22,7 +22,8 @@ train:
 
   model:
     bert:
-      dir: models/roberta_large_wiki201221_janome_bpe_merge_10000_vocab_24000
+      dir: models/roberta_base_wiki201221_janome_bpe_merge_10000_vocab_24000
+    epoch: 10
 
   device:
     fp16: true

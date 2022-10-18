@@ -5,12 +5,12 @@ defaults:
 name: attribute_extraction
 
 dataloader:
-  num_workers: 16
+  num_workers: 1
   train:
-    batch_size: 32
+    batch_size: 16
     shuffle: true
   eval:
-    batch_size: 256
+    batch_size: 16
   
 model:
   num_tokens: 512
@@ -19,6 +19,6 @@ optim:
   lr: 5e-5
 
 data:
-  dataset_dir: shinra2022_AttributeExtraction_train_20220509_prep
+  dataset_dir: ene-20220712_prep
   dev_size: 5
   duplicate_tokens: 64

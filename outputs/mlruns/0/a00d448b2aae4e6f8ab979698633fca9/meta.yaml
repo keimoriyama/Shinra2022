@@ -1,0 +1,15 @@
+artifact_uri: file:///uge_mnt/home/moriyama/Shinra2022/outputs/mlruns/0/a00d448b2aae4e6f8ab979698633fca9/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: a00d448b2aae4e6f8ab979698633fca9
+run_uuid: a00d448b2aae4e6f8ab979698633fca9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1665971291176
+status: 1
+tags: []
+user_id: moriyama

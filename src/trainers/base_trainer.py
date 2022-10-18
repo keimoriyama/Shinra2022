@@ -26,7 +26,6 @@ class BaseTrainer(object):
         self.dev_dataset = dev_dataset
 
         self.train_indexes = self.make_train_indexes()
-
         self.optimizer, self.scheduler = make_optimizer_and_scheduler(cfg, self.model)
 
         self.model.to(cfg.device.device)
@@ -69,33 +68,31 @@ class BaseTrainer(object):
                 random.shuffle(indexes)
             train_indexes += deepcopy(indexes)
         return train_indexes[:total_indexes]
-
     def train(self):
         self.model.train()
+        # import ipdb;ipdb.set_trace()
+        for epoch in range(1, self.cfg.model.epoch+1):
+            self.p_bar = tqdm.tqdm(total=self.cfg.total_updates, desc="Training:epoch:  0.0%")
+            self.p_bar.update(self.updates)
+            for batch in self.train_dataloader:
+                self.forward_and_backward_step(batch)
 
-        self.p_bar = tqdm.tqdm(total=self.cfg.total_updates, desc="Training:epoch:  0.0%")
-        self.p_bar.update(self.updates)
+                if self.steps % self.cfg.gradient_accumulation_steps == 0:
+                    self.update_model_parameters()  # self.updates += 1
 
-        for batch in self.train_dataloader:
-            self.forward_and_backward_step(batch)
+                    if self.updates % self.cfg.log_updates == 0:
+                        self.update_log()
 
-            if self.steps % self.cfg.gradient_accumulation_steps == 0:
-                self.update_model_parameters()  # self.updates += 1
+                    if self.updates % self.cfg.eval_updates == 0:
+                        eval_score = self.evaluation()
 
-                if self.updates % self.cfg.log_updates == 0:
-                    self.update_log()
+                        if self.best_eval_score is None or eval_score > self.best_eval_score:
+                            self.best_eval_score = eval_score
+                            self.save_model()
 
-                if self.updates % self.cfg.eval_updates == 0:
-                    eval_score = self.evaluation()
+                    if self.updates % self.cfg.checkpoint_updates == 0:
+                        self.save_checkpoint()
 
-                    if self.best_eval_score is None or eval_score > self.best_eval_score:
-                        self.best_eval_score = eval_score
-                        self.save_model()
-
-                if self.updates % self.cfg.checkpoint_updates == 0:
-                    self.save_checkpoint()
-
-        self.p_bar.close()
 
     def mean_loss(self, loss):
         mean_losses = {}
@@ -219,7 +216,8 @@ class BaseTrainer(object):
         except:
             pass
         np.random.set_state(checkpoint["np_random"])
-        self.train_indexes = self.train_indexes[self.steps * self.cfg.dataloader.train.batch_size :]
+        # import ipdb;ipdb.set_trace()
+        # self.train_indexes = self.train_indexes[self.steps * self.cfg.dataloader.train.batch_size :]
 
     def save_model(self):
         model_to_save = self.model.module if hasattr(self.model, "module") else self.model

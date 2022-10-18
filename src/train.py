@@ -20,7 +20,6 @@ def main(cfg):
     cfg.device.n_gpu = torch.cuda.device_count()
     cfg.device.device = "cuda" if torch.cuda.is_available() and not cfg.device.no_cuda else "cpu"
     set_seed(cfg.seed)
-
     if cfg.name == "classification":
         classification_train(cfg)
     if cfg.name == "attribute_extraction":

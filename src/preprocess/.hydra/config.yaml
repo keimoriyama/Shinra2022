@@ -1,0 +1,10 @@
+preprocess:
+  name: attribute_extraction
+  num_tokens: 512
+  data:
+    annotation_dir: ene-20220712
+    dir: data
+    output_dir: data
+  debug_mode: false
+  model:
+    dir: models/roberta_large_wiki201221_janome_bpe_merge_10000_vocab_24000

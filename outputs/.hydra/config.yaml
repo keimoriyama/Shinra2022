@@ -1,0 +1,43 @@
+train:
+  optim:
+    name: adamw
+    lr: 5.0e-05
+    adam_B1: 0.9
+    adam_B2: 0.999
+    adam_eps: 1.0e-08
+    weight_decay: 0
+  scheduler:
+    name: linear_with_warmup
+    warmup_updates: 0
+  name: attribute_extraction
+  dataloader:
+    num_workers: 1
+    train:
+      batch_size: 16
+      shuffle: true
+    eval:
+      batch_size: 16
+  model:
+    num_tokens: 512
+    bert:
+      dir: models/roberta_base_wiki201221_janome_bpe_merge_10000_vocab_24000
+    epoch: 10
+  data:
+    dataset_dir: ene-20220712_prep
+    dev_size: 5
+    duplicate_tokens: 64
+    dir: data
+  seed: 1234
+  debug_mode: false
+  total_updates: 30000
+  eval_updates: 1000
+  use_checkpoint: true
+  checkpoint_updates: 1000
+  log_updates: 10
+  gradient_accumulation_steps: 1
+  device:
+    fp16: true
+    fp16_opt_level: O1
+    no_cuda: false
+    device: null
+    n_gpu: null
